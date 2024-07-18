@@ -1,0 +1,85 @@
+/* navbar styling */
+.navbar {
+    background-color: #1677ff;
+    padding: 10px 20px;
+    top: 0;
+}
+
+.navbar-nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: end;
+}
+
+.nav-item {
+    display: inline;
+    margin-right: 10px;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.nav-link:hover {
+    background-color: #3988f8;
+}
+
+/* footer styling */
+.footer {
+    background-color: #1677ff;
+    color: #fff;
+    text-align: center;
+    padding: 8px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    margin-top: 100px;
+}
+
+/*body*/
+body {
+    /* background-image: url("../assets/images/bgImage.jpg"); */
+    /* background-repeat: no-repeat; */
+    /* background-size: auto; */
+    background-color: #93a8eb
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.weather-component {
+    background-color: #ffff;
+}
+
+.temperature {
+    width: 50%;
+    float: right;
+    position: relative;
+    left: 10px;
+}
+
+.temperature p {
+    font-family: "Raleway", sans-serif;
+    font-size: 80px;
+    font-weight: 100;
+    margin: 0 40px;
+}
+
+.temperature p span {
+    font-size: 50px;
+    font-weight: 200;
+}
+
+.forecast {
+    width: 40%;
+    float: left;
+    height: 100%;
+}
