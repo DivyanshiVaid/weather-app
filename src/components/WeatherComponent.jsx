@@ -8,20 +8,25 @@ import drizzle from '../assets/images/drizzle.png'
 import '../styleSheets/Layout.css';
 
 const WeatherComponent = () => {
+    /* get api key from env */
+    const APIKey = process.env.REACT_APP_API_KEY
+    /* use state to handle the states */
     const [city, setCity] = useState("")
+    const [loading, setLoading] = useState(false)
     const [error, setError] = useState("");
     const [weather, setWeather] = useState({});
 
+    /*handle onchange function */
     const onInputChange = (e) => {
         setCity(e.target.value)
+        setError("")
     }
 
-    const APIKey = "2bb62fdef9c356a1494a8f98064acd21"
-
+    /* Api call to fetch the data */
     const weatherUpdate = (city) => {
+        setLoading(true)
         fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`)
             .then(response => {
-                console.log(response)
                 if (response.status === 401) {
                     setError('Unauthorized. Check your API key.');
                     return;
@@ -50,15 +55,16 @@ const WeatherComponent = () => {
                 } else {
                     imageUrl = cloud
                 }
+                setLoading(false)
                 setWeather({ ...data, image: imageUrl })
             })
             .catch((error) => {
                 setWeather("");
-                setError("Not found")
-                console.log(error)
+                setError("City weather not found")
             })
     }
 
+    /*on submit function */
     const fetchDetails = (city) => {
         weatherUpdate(city)
     }
@@ -72,49 +78,56 @@ const WeatherComponent = () => {
                         <p className='text-danger'>{city.length > 20 && "City name is too large" || error}</p>
                     </div>
                     <div className="col-auto">
-                        <button className="btn btn-outline-primary my-2 my-sm-0" type="button" onClick={() => fetchDetails(city)} disabled={city.length < 2}>Search</button>
+                        <button className="btn btn-outline-primary my-sm-0" type="button" onClick={() => fetchDetails(city)} disabled={city.length < 2}>Search</button>
                     </div>
                 </form>
-                <WeatherImages imageUrl={typeof weather.main != "undefined" ? weather.image : cloud} />
-                <ul className='p-4 font-weight-bold'>
-                    {typeof weather.main != "undefined" ? (
-                        <div>
-                            <li className="text-center">
-                                <p>
-                                    {weather?.name}, {weather?.sys?.country}
-                                </p>
-                            </li>
-                            <li>
-                                Temperature
-                                <span className="temperature">
-                                    {Math.round(weather?.main?.temp)}°c ({weather?.weather[0]?.main})
-                                </span>
-                            </li>
-                            <li>
-                                Humidity
-                                <span className="temperature">
-                                    {Math.round(weather?.main?.humidity)}%
-                                </span>
-                            </li>
-                            <li>
-                                Visibility
-                                <span className="temperature">
-                                    {Math.round(weather?.visibility)} mi
-                                </span>
-                            </li>
-                            <li>
-                                Wind Speed
-                                <span className="temperature">
-                                    {Math.round(weather?.wind?.speed)} Km/h
-                                </span>
-                            </li>
-                        </div>
-                    ) : (
-                        <li>
-                            {error}
-                        </li>
-                    )}
-                </ul>
+                {loading ?
+                    <div className="d-flex justify-content-center p-3">
+                        <div className="spinner-border text-primary" role="status" style={{ width: "5rem", height: "5rem" }} />
+                    </div>
+                    :
+                    <>
+                        <WeatherImages imageUrl={typeof weather.main != "undefined" ? weather.image : cloud} />
+                        <ul className='p-4 font-weight-bold'>
+                            {typeof weather.main != "undefined" ? (
+                                <div>
+                                    <li className="text-center fs-1">
+                                        <p>
+                                            {weather?.name}, {weather?.sys?.country}
+                                        </p>
+                                    </li>
+                                    <li className='fs-4'>
+                                        Temperature
+                                        <span className="temperature fs-4">
+                                            {Math.round(weather?.main?.temp)}°c ({weather?.weather[0]?.main})
+                                        </span>
+                                    </li>
+                                    <li className='fs-4'>
+                                        Humidity
+                                        <span className="temperature fs-4">
+                                            {Math.round(weather?.main?.humidity)}%
+                                        </span>
+                                    </li>
+                                    <li className='fs-4'>
+                                        Visibility
+                                        <span className="temperature fs-4">
+                                            {Math.round(weather?.visibility)} mi
+                                        </span>
+                                    </li>
+                                    <li className='fs-4'>
+                                        Wind Speed
+                                        <span className="temperature fs-4">
+                                            {Math.round(weather?.wind?.speed)} Km/h
+                                        </span>
+                                    </li>
+                                </div>
+                            ) : (
+                                <li className='fs-2'>
+                                    {error}
+                                </li>
+                            )}
+                        </ul>
+                    </>}
             </div>
         </div>
     );
